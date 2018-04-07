@@ -12,12 +12,12 @@ bot.on('ready', function () {
 bot.login('NDMxODQ4MzQwOTgxMDIyNzIw.DapJMg.j4V-Kx58TCDn49Iqyw3zHNXrQ1s')
 
 bot.on('message', message => {
-  // if(dafydoc){
-  //   var theOnceInAWhile = new Doc(message)
-  //   theOnceInAWhile.randomShowUp();
-  //   theOnceInAWhile.checkLive(bot);
-  //   dafydoc=false;
-  // }
+  if(dafydoc){
+    var theOnceInAWhile = new Doc(message)
+    theOnceInAWhile.randomShowUp();
+    theOnceInAWhile.checkLive(bot);
+    dafydoc=false;
+  }
 
   var doc = new Doc(message)
 

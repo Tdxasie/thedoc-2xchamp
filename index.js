@@ -9,7 +9,7 @@ bot.on('ready', function () {
   dafydoc = true;
 })
 
-bot.login('NDMxODQ4MzQwOTgxMDIyNzIw.DakwQQ.UoqWc9Y9ZNFya5tZ4IMdEQglDI8')
+bot.login('NDMxODQ4MzQwOTgxMDIyNzIw.Dao-Vg.BKqIhLlYZwejXUXbx0pSh0hPLnQ')
 
 bot.on('message', message => {
   if(dafydoc){

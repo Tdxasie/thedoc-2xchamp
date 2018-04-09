@@ -9,7 +9,7 @@ bot.on('ready', function () {
   dafydoc = true;
 })
 
-bot.login('NDMxODQ4MzQwOTgxMDIyNzIw.DapJMg.j4V-Kx58TCDn49Iqyw3zHNXrQ1s')
+bot.login('NDMxODQ4MzQwOTgxMDIyNzIw.DapkMQ.VyftBjcO7yxtru7EuBwI_FJZtG0')
 
 bot.on('message', message => {
   if(dafydoc){
@@ -28,33 +28,30 @@ bot.on('message', message => {
       break
 
     case 'doc, come to me':
-      doc.joinChevreuil()
+      doc.joinFirstVchannel()
       break
 
     case 'get your trophies':
       doc.leave()
       break
 
-    case "doc I'm worried":
-      doc.noWorries()
-      break
-
-    case "bonjour":
-      message.channel.send("what ?", {tts: true})
-      break
-
-    case "raul":
-      doc.rAUUL()
-      break
+    // case "bonjour":
+    //   message.channel.send("what ?", {tts: true})
+    //   break
 
   }
 
+  //console.log(message.content)
+
   switch (true) {
+
+      //text
+
       case /<:Msmile:428299610272956430>/.test(message.content):
         message.channel.send("Did you miss me ?", {tts: true})
         break;
 
-      case /mdr|lol|ptdr|xD|x\)|riz|<:lol:431951388751298561>|<:noel:416549332205043712>/.test(message.content):
+      case /mdr|lol|ptdr|xD|x\)|riz|<:lol:431951388751298561>|<:noel:416549332205043712>/i.test(message.content):
         message.channel.send("<:lul:422532691817136203>")
         break;
 
@@ -62,34 +59,44 @@ bot.on('message', message => {
         message.channel.send("Well done kids", {tts: true})
         break;
 
-      case /wtf/.test(message.content):
+      case /wtf/i.test(message.content):
         message.channel.send("<:wat:336130868869332994>")
         break;
 
-      case (message.content.startsWith('$tip')):
+      case /(doc\s|)\u003C\u0040(\d+)\u003E\sis\s(raging|salty|gonna\srage\squit)/i.test(message.content):
+        var id = /\u003C\u0040(\w+)\u003E/.exec(message.content)
+        message.channel.send("Come on " + id[0] + " get yourself together !\rhttps://imgur.com/a/JIi3V")
+        break;
+
+      //functions
+
+      case /ra(u+)l/i.test(message.content):
+        doc.rAUUL()
+        break;
+
+      case /(doc\s|)(i\u0027m|im|he\sis|he\u0027s)\s(stressed|worried)/i.test(message.content):
+        doc.noWorries()
+        break;
+
+      //préfixes
+
+      case message.content.startsWith('$tip'):
         doc.tip()
         break;
 
-      case /(thx|thanks|merci)(?=\sdoc)/.test(message.content):
-        message.reply("Your welcome kiddo \r https://imgur.com/a/KEldC")
-        break
+      //replies
+
+      case /(hey|hi)\s(dr|doc)/i.test(message.content):
+        message.reply("Hello Champion looking great today ?")
+        break;
+
+      case /dormir|night|nuit/i.test(message.content):
+        message.reply("Sleep tight champion <:sleep:413097431425875978>")
+        break;
+
+      case /(thx|thanks|merci)\sdoc/i.test(message.content):
+        message.reply("You're welcome kiddo \r https://imgur.com/a/KEldC")
+        break;
+
     }
 })
-
-
-
-
-
-// bot.on('message', message => {
-//   if (message.content === 'doc, come to me') {
-//     let voiceChannel = message.guild.channels
-//       .filter(function (channel) { return channel.name === 'Chevreuil' })
-//       .first()
-//     voiceChannel
-//       .join()
-//       .then(function (connection){
-//         message.channel.send('/tts Im here, feel my breath over your neck')
-//         connection.disconnect()
-//       })
-//   }
-// })

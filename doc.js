@@ -8,7 +8,7 @@ module.exports = class Doc {
       this.message = message
 
       this.voiceChnl = message.guild.channels
-        .filter(function(channel) {return channel.name === 'Chevreuil'})
+        .filter(function(channel) {return channel.type === 'voice'})
         .first()
 
     } else {
@@ -27,7 +27,7 @@ module.exports = class Doc {
       })
   }
 
-  joinChevreuil () {
+  joinFirstVchannel () {
     var message = this.message;
     this.voiceChnl.join()
       .then(function() {
@@ -74,8 +74,11 @@ module.exports = class Doc {
       case (val > 1 && val < 200):
         message.reply("Thank you for the "+val+" $ donation");
         break
-      case (val > 200):
+      case (val >= 200 && val != 600):
         message.reply("ARE YOU INSANE ?! "+val+"$ ??");
+        break
+      case (val == 600):
+        this.playVideo("https://youtu.be/duHPA2Tyu2M");
         break
       }
     }
@@ -93,12 +96,12 @@ module.exports = class Doc {
 
         if(Math.floor((Math.random() * 10) + 1) == 1){
 
-          console.log("I'm back RARE");
+          console.log("Doc really loves being the best");
           theDoc.playVideo("https://youtu.be/F_ZcIjjfh4A")
 
         } else {
 
-          console.log("I'm back");
+          console.log("Doc loves being the best");
           theDoc.playVideo("https://youtu.be/bhyBsKnGTZI")
 
         }
@@ -120,15 +123,12 @@ module.exports = class Doc {
           .then((data) => {
             if(data["stream"] === null){
 
-              console.log("It's a god damn snooze fest in there")
-              if(liveDoc){
-                liveDoc = false
-                bot.user.setActivity('ses Trophées', { type: 'WATCHING' })
-              }
+              liveDoc = false
+              bot.user.setActivity('ses Trophées', { type: 'WATCHING' })
+              //console.log("It's a god damn snooze fest in there")
 
             }
             else{
-              console.log("The Arena is wide open !")
 
               if(!liveDoc){
                 liveDoc = true
@@ -136,6 +136,7 @@ module.exports = class Doc {
                 // var mess = " -- "+data["stream"]["channel"].status+" -- \r    Playing : "+data["stream"].game+"\r    Champions : "+data["stream"].viewers*1000+"\r---------------------------------"
                 message.channel.send("The Arena is WIDE open ! "+data["stream"].viewers*1000+" Champions !\r => https://www.twitch.tv/drdisrespectlive")
                 bot.user.setActivity(data["stream"].game, {type: "STREAMING"})
+                console.log("The Arena is wide open !")
               }
 
             }
@@ -151,14 +152,14 @@ module.exports = class Doc {
               .then((data) => {
                 if(data["stream"] === null){
                   liveZerator = false
-                  console.log("Zerator not live")
+                  //console.log("Zerator not live")
                 }
                 else{
-                  console.log("Zerator is live")
 
                   if(!liveZerator){
                     liveZerator = true
                     message.channel.send("A little french streamer is live ! He is playing "+data["stream"].game+"\r => https://www.twitch.tv/zerator")
+                    console.log("Zerator is live")
                   }
 
                 }

@@ -2,24 +2,20 @@ const Discord = require('discord.js')
 const bot = new Discord.Client()
 const Doc = require('./doc.js')
 // import {Doc} from './doc.js';
-var dafydoc;
+var doc;
 
 bot.on('ready', function () {
   console.log("Ready to dominate")
-  dafydoc = true;
+
+  doc = new Doc(bot);
+  doc.randomShowUp(); // RIP the once in a while
+  doc.checkLive(bot);
+
 })
 
-bot.login('NDMxODQ4MzQwOTgxMDIyNzIw.DapkMQ.VyftBjcO7yxtru7EuBwI_FJZtG0')
+bot.login('NDMxODQ4MzQwOTgxMDIyNzIw.Da0qLg.msw555kGzq3lDhXnybBV6NKPUA4')
 
 bot.on('message', message => {
-  if(dafydoc){
-    var theOnceInAWhile = new Doc(message)
-    theOnceInAWhile.randomShowUp();
-    theOnceInAWhile.checkLive(bot);
-    dafydoc=false;
-  }
-
-  var doc = new Doc(message)
 
   switch(message.content){
 
@@ -28,20 +24,14 @@ bot.on('message', message => {
       break
 
     case 'doc, come to me':
-      doc.joinFirstVchannel()
+      doc.joinFirstVchannel(message)
       break
 
     case 'get your trophies':
-      doc.leave()
-      break
-
-    // case "bonjour":
-    //   message.channel.send("what ?", {tts: true})
-    //   break
+      doc.leave(message)
+      break;
 
   }
-
-  //console.log(message.content)
 
   switch (true) {
 
@@ -63,25 +53,37 @@ bot.on('message', message => {
         message.channel.send("<:wat:336130868869332994>")
         break;
 
-      case /(doc\s|)\u003C\u0040(\d+)\u003E\sis\s(raging|salty|gonna\srage\squit)/i.test(message.content):
+      case /(doc\s|)\u003C\u0040(\d+)\u003E(\s+)is\s(raging|salty|gonna\srage\squit)/i.test(message.content):
         var id = /\u003C\u0040(\w+)\u003E/.exec(message.content)
         message.channel.send("Come on " + id[0] + " get yourself together !\rhttps://imgur.com/a/JIi3V")
         break;
 
       //functions
 
-      case /ra(u+)l/i.test(message.content):
+      case /f(u+|)ck|sh(i+)t|m(e+)rde|d(a+)mn|prick|ptn|race|tg|pd|con|abruti|stfu|salope|cunt|encul(\u00E9|e)/i.test(message.content):
+        doc.watchYourMouth(message)
+        break;
+
+      case /r(a+)(u+)l/i.test(message.content):
         doc.rAUUL()
         break;
 
-      case /(doc\s|)(i\u0027m|im|he\sis|he\u0027s)\s(stressed|worried)/i.test(message.content):
+      case /(doc\s|)(i\u0027m|im|he\sis|he\u0027s)\s(stressed|worried|crying)/i.test(message.content):
         doc.noWorries()
+        break;
+
+      case /doc\su\sgood/i.test(message.content):
+        doc.imGood()
+        break;
+
+      case /gi(l+)e(t+)e/i.test(message.content):
+        doc.gilette()
         break;
 
       //préfixes
 
       case message.content.startsWith('$tip'):
-        doc.tip()
+        doc.tip(message)
         break;
 
       //replies
@@ -95,7 +97,7 @@ bot.on('message', message => {
         break;
 
       case /(thx|thanks|merci)\sdoc/i.test(message.content):
-        message.reply("You're welcome kiddo \r https://imgur.com/a/KEldC")
+        message.reply("You're welcome kiddo\r https://imgur.com/a/xvc4n")
         break;
 
     }

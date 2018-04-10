@@ -3,44 +3,68 @@ const fetch = require("node-fetch");
 
 module.exports = class Doc {
 
-  constructor (message) {
-    if(message != undefined){
-      this.message = message
+  constructor (bot) {
+    this.rudeKids =  new Object();
 
-      this.voiceChnl = message.guild.channels
-        .filter(function(channel) {return channel.type === 'voice'})
-        .first()
+    this.textChnl = bot.channels
+                      .filter(function(channel) {return channel.type === 'text'})
+                      .first()
 
-    } else {
-      console.log("message not defined")
-    }
+    this.voiceChnl = bot.channels
+                      .filter(function(channel) {return channel.type === 'voice'})
+                      .first()
   }
 
-  playVideo (url) {
+  playVideo (url, vol) {
     this.voiceChnl.join()
       .then(function(connection) {
         connection
-          .playStream(YoutubeStream(url))
+          .playStream(YoutubeStream(url), {volume : vol})
           .on('end', function () {
             connection.disconnect()
           })
       })
   }
 
-  joinFirstVchannel () {
-    var message = this.message;
+  joinFirstVchannel (message) {
     this.voiceChnl.join()
       .then(function() {
-          message.channel.send("I'm here, feel my breath over your neck", {tts: true})
+          message.channel.send("I'm here feel my breath over your neck", {tts : true})
       })
   }
 
-  leave () {
+  leave (message) {
     this.voiceChnl.leave()
   }
 
   noWorries () {
     this.playVideo('https://youtu.be/UbHIViE3pRE')
+  }
+
+  imGood() {
+    this.playVideo('https://youtu.be/GRAof0POU98')
+  }
+
+  gilette () {
+    this.playVideo('https://youtu.be/9fWxCIi5PIw', 0.3)
+  }
+
+  watchYourMouth (message) {
+
+    if(this.rudeKids[message.author.id] != undefined){
+      this.rudeKids[message.author.id] = this.rudeKids[message.author.id]+1 ;
+
+      if (this.rudeKids[message.author.id] > 4){
+        message.reply("Be careful, you wouldn't want to curse under my watch again\r https://imgur.com/a/v7rvO");
+        this.playVideo('https://youtu.be/Jw6uHFCZSCk');
+        this.rudeKids[message.author.id] = 0;
+      }
+
+    } else {
+      this.rudeKids[message.author.id] = 1;
+    }
+
+    console.log(this.rudeKids);
   }
 
   rAUUL () {
@@ -56,11 +80,10 @@ module.exports = class Doc {
                   "https://youtu.be/UyIXuv3PO50"];
 
     var random = Math.floor(Math.random() * 10);
-    this.playVideo(rauuls[random]);
+    this.playVideo(rauuls[random], 5);
   }
 
-  tip () {
-    var message = this.message;
+  tip (message) {
     let args = message.content.split(' ')
     let val = args[1];
 
@@ -79,98 +102,103 @@ module.exports = class Doc {
         break
       case (val == 600):
         this.playVideo("https://youtu.be/duHPA2Tyu2M");
-        break
-      }
+        break;
+    }
+  }
+
+  randomShowUp(){
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
     }
 
-    randomShowUp(){
-      function sleep(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
+    async function callTheDoc(theDoc) {
+
+      var random = Math.floor((Math.random() * 121) + 30);
+
+      await sleep(random*60*1000);
+
+      if(Math.floor((Math.random() * 10) + 1) == 1){
+
+        console.log("Doc really loves being the best");
+        theDoc.playVideo("https://youtu.be/F_ZcIjjfh4A")
+
+      } else {
+
+        console.log("Doc loves being the best");
+        theDoc.playVideo("https://youtu.be/bhyBsKnGTZI")
+
       }
 
-      async function callTheDoc(theDoc) {
-
-        var random = Math.floor((Math.random() * 121) + 30);
-
-        await sleep(random*60*1000);
-
-        if(Math.floor((Math.random() * 10) + 1) == 1){
-
-          console.log("Doc really loves being the best");
-          theDoc.playVideo("https://youtu.be/F_ZcIjjfh4A")
-
-        } else {
-
-          console.log("Doc loves being the best");
-          theDoc.playVideo("https://youtu.be/bhyBsKnGTZI")
-
-        }
-
-        callTheDoc(theDoc);
-      }
-
-      callTheDoc(this);
+      callTheDoc(theDoc);
     }
 
-    checkLive(bot) {
-      function sleep(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-      }
-      var liveDoc = true;
-      async function checkDocStream(message,bot){
-        fetch('https://api.twitch.tv/kraken/streams/drdisrespectlive?client_id=vnu4gzd7h2dasngmfkldwc1aapw2xm')
-        .then((response) => response.json())
-          .then((data) => {
-            if(data["stream"] === null){
+    callTheDoc(this);
+  }
 
-              liveDoc = false
-              bot.user.setActivity('ses Trophées', { type: 'WATCHING' })
-              //console.log("It's a god damn snooze fest in there")
+  checkLive(bot) {
+    var game = '';
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+    var liveDoc = true;
+    async function checkDocStream(bot,textChnl){
+      fetch('https://api.twitch.tv/kraken/streams/drdisrespectlive?client_id=vnu4gzd7h2dasngmfkldwc1aapw2xm')
+      .then((response) => response.json())
+        .then((data) => {
+          if(data["stream"] === null){
 
+            liveDoc = false
+            bot.user.setActivity('ses Trophées', { type: 'WATCHING' })
+            //console.log("It's a god damn snooze fest in there")
+
+          }
+          else{
+
+            if(!liveDoc){
+              liveDoc = true
+              // message.channel.send("The Arena is wide open with "+data["stream"].game+" !", {tts: true})  '"+data["stream"]["channel"].status+"'
+              // var mess = " -- "+data["stream"]["channel"].status+" -- \r    Playing : "+data["stream"].game+"\r    Champions : "+data["stream"].viewers*1000+"\r---------------------------------"
+              textChnl.send("The Arena is WIDE open ! "+data["stream"].viewers*1000+" Champions !\r => https://www.twitch.tv/drdisrespectlive")
+              console.log("The Arena is wide open !")
             }
-            else{
 
-              if(!liveDoc){
-                liveDoc = true
-                // message.channel.send("The Arena is wide open with "+data["stream"].game+" !", {tts: true})  '"+data["stream"]["channel"].status+"'
-                // var mess = " -- "+data["stream"]["channel"].status+" -- \r    Playing : "+data["stream"].game+"\r    Champions : "+data["stream"].viewers*1000+"\r---------------------------------"
-                message.channel.send("The Arena is WIDE open ! "+data["stream"].viewers*1000+" Champions !\r => https://www.twitch.tv/drdisrespectlive")
-                bot.user.setActivity(data["stream"].game, {type: "STREAMING"})
-                console.log("The Arena is wide open !")
+            if(game != data["stream"].game){
+              console.log("The doc changed game")
+              game = data["stream"].game;
+              bot.user.setActivity(game, {url: "https://www.twitch.tv/drdisrespectlive", type: "STREAMING"})
+            }
+
+          }
+
+        });
+        await sleep(1000*120);
+        checkDocStream(bot,textChnl);
+      }
+      var liveZerator = false
+      async function checkZeratorStream(textChnl){
+        fetch('https://api.twitch.tv/kraken/streams/zerator?client_id=vnu4gzd7h2dasngmfkldwc1aapw2xm')
+          .then((response) => response.json())
+            .then((data) => {
+              if(data["stream"] === null){
+                liveZerator = false
+                //console.log("Zerator not live")
+              }
+              else{
+
+                if(!liveZerator){
+                  liveZerator = true
+                  textChnl.send("A little french streamer is live ! He is playing "+data["stream"].game+"\r => https://www.twitch.tv/zerator")
+                  console.log("Zerator is live")
+                }
+
               }
 
-            }
-
-          });
+            });
           await sleep(1000*120);
-          checkDocStream(message,bot);
+          checkZeratorStream(textChnl);
         }
-        var liveZerator = false
-        async function checkZeratorStream(message){
-          fetch('https://api.twitch.tv/kraken/streams/zerator?client_id=vnu4gzd7h2dasngmfkldwc1aapw2xm')
-            .then((response) => response.json())
-              .then((data) => {
-                if(data["stream"] === null){
-                  liveZerator = false
-                  //console.log("Zerator not live")
-                }
-                else{
-
-                  if(!liveZerator){
-                    liveZerator = true
-                    message.channel.send("A little french streamer is live ! He is playing "+data["stream"].game+"\r => https://www.twitch.tv/zerator")
-                    console.log("Zerator is live")
-                  }
-
-                }
-
-              });
-            await sleep(1000*120);
-            checkZeratorStream(message);
-          }
-        checkDocStream(this.message,bot);
-        checkZeratorStream(this.message);
-      }
-
+      checkDocStream(bot,this.textChnl);
+      checkZeratorStream(this.textChnl);
+    }
 
   }

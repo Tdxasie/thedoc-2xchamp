@@ -6,6 +6,8 @@ module.exports = class Doc {
   constructor (bot) {
     this.rudeKids =  new Object();
 
+    this.broadcast = bot.createVoiceBroadcast();
+
     this.textChnl = bot.channels
                       .filter(function(channel) {return channel.type === 'text'})
                       .first()
@@ -16,14 +18,25 @@ module.exports = class Doc {
   }
 
   playVideo (url, vol) {
+    this.broadcast.resume()
+    var theDoc = this
     this.voiceChnl.join()
       .then(function(connection) {
-        connection
+        theDoc.broadcast
           .playStream(YoutubeStream(url), {volume : vol})
           .on('end', function () {
             connection.disconnect()
           })
+          connection.playBroadcast(theDoc.broadcast);
       })
+  }
+
+  paused () {
+    this.broadcast.pause()
+  }
+
+  resume () {
+    this.broadcast.resume()
   }
 
   joinFirstVchannel (message) {
@@ -33,8 +46,9 @@ module.exports = class Doc {
       })
   }
 
-  leave (message) {
+  leave () {
     this.voiceChnl.leave()
+    this.broadcast.destroy()
   }
 
   noWorries () {
@@ -46,7 +60,31 @@ module.exports = class Doc {
   }
 
   gilette () {
-    this.playVideo('https://youtu.be/9fWxCIi5PIw', 0.3)
+    this.playVideo('https://youtu.be/9fWxCIi5PIw', 0.1)
+  }
+
+  whoAmI () {
+    this.playVideo('https://youtu.be/3a9iwULc3lg', 0.5)
+  }
+
+  howToFortnite () {
+    this.playVideo('https://youtu.be/4A229JPdXac', 0.1)
+  }
+  // sorry () {
+  //   this.playVideo('https://youtu.be/PXy74FmiJYY')
+  // }
+
+  respect (message) {
+
+    if(this.rudeKids[message.author.id] != undefined){
+        this.rudeKids[message.author.id] = this.rudeKids[message.author.id]+1
+
+    } else {
+      this.rudeKids[message.author.id] = 1;
+    }
+
+    this.playVideo('https://youtu.be/KFEVkaHlrNs', 2)
+    console.log(this.rudeKids);
   }
 
   watchYourMouth (message) {
@@ -68,19 +106,41 @@ module.exports = class Doc {
   }
 
   rAUUL () {
-    var rauuls = ["https://youtu.be/Y9-vGdWLg7w",
-                  "https://youtu.be/W3g9PyUDPxg",
-                  "https://youtu.be/TQgeO6GaPLo",
-                  "https://youtu.be/yx4xD8qV1cE",
-                  "https://youtu.be/QlI6YKDkGTE",
-                  "https://youtu.be/G38f8W_wykI",
-                  "https://youtu.be/dp1zjoJyGGQ",
-                  "https://youtu.be/P-zYLG-lSVs",
-                  "https://youtu.be/8cykZRS9yZ8",
-                  "https://youtu.be/UyIXuv3PO50"];
+    var rauuls = ["https://youtu.be/Y9-vGdWLg7w", "https://youtu.be/W3g9PyUDPxg", "https://youtu.be/TQgeO6GaPLo", "https://youtu.be/yx4xD8qV1cE",
+                  "https://youtu.be/QlI6YKDkGTE", "https://youtu.be/G38f8W_wykI", "https://youtu.be/dp1zjoJyGGQ", "https://youtu.be/P-zYLG-lSVs",
+                  "https://youtu.be/8cykZRS9yZ8", "https://youtu.be/UyIXuv3PO50"];
 
     var random = Math.floor(Math.random() * 10);
     this.playVideo(rauuls[random], 5);
+  }
+
+  banger () {
+    var bangers = ["https://youtu.be/a0ZkhlJUQAM", "https://youtu.be/wy9r2qeouiQ", "https://youtu.be/ULZOgcHXwXw", "https://youtu.be/MQFszVb2IL8",
+                   "https://youtu.be/Mod6Ww0L2SE", "https://youtu.be/pjVUlz0HCFI", "https://youtu.be/FFrehuYAH4A", "https://youtu.be/HZ28lC55VYc",
+                   "https://youtu.be/YanwyGP0Li4", "https://youtu.be/YlsKhAZqQf0", "https://youtu.be/gzZ77SEiT-Q", "https://youtu.be/o7AGVRG_wkc",
+                   "https://youtu.be/wgw2l4ZCQDc", "https://youtu.be/G22X5X49VhM", "https://youtu.be/SMdDy2LS-ik", "https://youtu.be/IUvvGf8T7wM",
+                   "https://youtu.be/RfkbC8VYEWM", "https://youtu.be/gQ5gtInauiI", "https://youtu.be/MQFszVb2IL8", "https://youtu.be/RgVfU5w2CVQ",
+                   "https://youtu.be/EAYfJckSEN0"]
+
+   var random = Math.floor(Math.random() * bangers.length);
+   this.playVideo(bangers[random], 0.01);
+  }
+
+  bangerPlayer (message) {
+    let args = message.content.split(' ')
+    let val = args[1];
+
+    switch(true) {
+      case /pause/i.test(val):
+        this.paused()
+        break
+      case /resume/i.test(val):
+        this.resume()
+        break
+      case /chill/i.test(val):
+        this.chill()
+        break
+    }
   }
 
   tip (message) {
@@ -120,12 +180,12 @@ module.exports = class Doc {
       if(Math.floor((Math.random() * 10) + 1) == 1){
 
         console.log("Doc really loves being the best");
-        theDoc.playVideo("https://youtu.be/F_ZcIjjfh4A")
+        theDoc.playVideo("https://youtu.be/F_ZcIjjfh4A", 2)
 
       } else {
 
         console.log("Doc loves being the best");
-        theDoc.playVideo("https://youtu.be/bhyBsKnGTZI")
+        theDoc.playVideo("https://youtu.be/bhyBsKnGTZI", 5)
 
       }
 
@@ -149,15 +209,12 @@ module.exports = class Doc {
 
             liveDoc = false
             bot.user.setActivity('ses Trophées', { type: 'WATCHING' })
-            //console.log("It's a god damn snooze fest in there")
 
           }
           else{
 
             if(!liveDoc){
               liveDoc = true
-              // message.channel.send("The Arena is wide open with "+data["stream"].game+" !", {tts: true})  '"+data["stream"]["channel"].status+"'
-              // var mess = " -- "+data["stream"]["channel"].status+" -- \r    Playing : "+data["stream"].game+"\r    Champions : "+data["stream"].viewers*1000+"\r---------------------------------"
               textChnl.send("The Arena is WIDE open ! "+data["stream"].viewers*1000+" Champions !\r => https://www.twitch.tv/drdisrespectlive")
               console.log("The Arena is wide open !")
             }
@@ -166,6 +223,7 @@ module.exports = class Doc {
               console.log("The doc changed game")
               game = data["stream"].game;
               bot.user.setActivity(game, {url: "https://www.twitch.tv/drdisrespectlive", type: "STREAMING"})
+              //textChnl.send("The Arena is WIDE open ! Come join the "+data["stream"].viewers+" milion Champions !\rhttps://imgur.com/a/sOlWMe")
             }
 
           }

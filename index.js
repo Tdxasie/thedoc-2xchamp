@@ -13,7 +13,7 @@ bot.on('ready', function () {
 
 })
 
-bot.login('NDMxODQ4MzQwOTgxMDIyNzIw.Da0qLg.msw555kGzq3lDhXnybBV6NKPUA4')
+bot.login('NDMxODQ4MzQwOTgxMDIyNzIw.Da6leQ.YvsgKae_nW7xBKO9dOO210AbBc8')
 
 bot.on('message', message => {
 
@@ -24,11 +24,11 @@ bot.on('message', message => {
       break
 
     case 'doc, come to me':
-      doc.joinFirstVchannel(message)
+      doc.joinFirstVchannel()
       break
 
     case 'get your trophies':
-      doc.leave(message)
+      doc.leave()
       break;
 
   }
@@ -60,7 +60,15 @@ bot.on('message', message => {
 
       //functions
 
-      case /f(u+|)ck|sh(i+)t|m(e+)rde|d(a+)mn|prick|ptn|race|tg|pd|con|abruti|stfu|salope|cunt|encul(\u00E9|e)/i.test(message.content):
+      case /(fuck\syou|tg)\sdoc/i.test(message.content):
+        doc.respect(message)
+        break;
+
+      case /doc\show\sto\sfortnite/i.test(message.content):
+        doc.howToFortnite(message)
+        break;
+
+      case /f(u+|)ck|sh(i+)t|m(e+)rde|d(a+)mn|prick|ptn|race|tg|pd|con|abruti|stfu|salope|pute|cunt|encul(\u00E9|e)/i.test(message.content):
         doc.watchYourMouth(message)
         break;
 
@@ -68,12 +76,25 @@ bot.on('message', message => {
         doc.rAUUL()
         break;
 
-      case /(doc\s|)(i\u0027m|im|he\sis|he\u0027s)\s(stressed|worried|crying)/i.test(message.content):
+      case /banger/i.test(message.content):
+        doc.banger(message)
+        break;
+
+      // case /(sorry|sry|désol(\u00E9|e))\sdoc/i.test(message.content):
+      //   doc.sorry()
+      //   break;
+
+      case /(doc\s|)(i\u0027m|im|he\sis|he\u0027s|hes)\s(stressed|worried|crying)/i.test(message.content):
         doc.noWorries()
         break;
 
       case /doc\su\sgood/i.test(message.content):
         doc.imGood()
+        break;
+
+      case /doc\swho\sare\syou/i.test(message.content):
+        message.reply("I'm the 6 foot 8 1993 1994 blockbuster videogame champion.")
+        doc.whoAmI()
         break;
 
       case /gi(l+)e(t+)e/i.test(message.content):
@@ -84,6 +105,10 @@ bot.on('message', message => {
 
       case message.content.startsWith('$tip'):
         doc.tip(message)
+        break;
+
+      case message.content.startsWith('doc'):
+        doc.bangerPlayer(message)
         break;
 
       //replies

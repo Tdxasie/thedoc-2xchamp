@@ -70,6 +70,13 @@ module.exports = class Doc {
   howToFortnite () {
     this.playVideo('https://youtu.be/4A229JPdXac', 0.1)
   }
+
+  laughing (message) {
+    var lols = ["<:lul:422532691817136203>", "<:noel:416549332205043712>", "<:lol:431951388751298561>"]
+    var random = Math.floor(Math.random() * 3);
+    message.channel.send(lols[random]);
+  }
+
   // sorry () {
   //   this.playVideo('https://youtu.be/PXy74FmiJYY')
   // }
@@ -173,7 +180,7 @@ module.exports = class Doc {
 
     async function callTheDoc(theDoc) {
 
-      var random = Math.floor((Math.random() * 121) + 30);
+      var random = Math.floor((Math.random() * 250) + 30);
 
       await sleep(random*60*1000);
 
@@ -215,7 +222,7 @@ module.exports = class Doc {
 
             if(!liveDoc){
               liveDoc = true
-              textChnl.send("The Arena is WIDE open ! "+data["stream"].viewers*1000+" Champions !\r => https://www.twitch.tv/drdisrespectlive")
+              textChnl.send("The Arena is WIDE open ! "+data["stream"].viewers+" milion Champions !\r => https://www.twitch.tv/drdisrespectlive")
               console.log("The Arena is wide open !")
             }
 

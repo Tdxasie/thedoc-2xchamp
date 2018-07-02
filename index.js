@@ -41,10 +41,6 @@ bot.on('message', message => {
         message.channel.send("Did you miss me ?", {tts: true})
         break;
 
-      case /mdr|lol|ptdr|xD|x\)|riz|<:lol:431951388751298561>|<:noel:416549332205043712>/i.test(message.content):
-        message.channel.send("<:lul:422532691817136203>")
-        break;
-
       case /<:top1:427923720481275904>/.test(message.content):
         message.channel.send("Well done kids", {tts: true})
         break;
@@ -54,13 +50,19 @@ bot.on('message', message => {
         break;
 
       case /(doc\s|)\u003C\u0040(\d+)\u003E(\s+)is\s(raging|salty|gonna\srage\squit)/i.test(message.content):
+      // détecte l'id d'une personne mentionnée
         var id = /\u003C\u0040(\w+)\u003E/.exec(message.content)
         message.channel.send("Come on " + id[0] + " get yourself together !\rhttps://imgur.com/a/JIi3V")
         break;
 
       //functions
 
-      case /(fuck\syou|tg)\sdoc/i.test(message.content):
+      case /mdr|lol|ptdr|xD|x\)|riz|drole|<:lol:431951388751298561>|<:noel:416549332205043712>/i.test(message.content):
+        //doc.laughing(message)
+        message.channel.send("<:lul:422532691817136203>")
+        break;
+
+      case /(f(u+|)ck\s(u|you)|sh(i+)t|m(e+)rde|d(a+)mn|prick|ptn|race|batard|bite|tg|pd|con\b|abruti|stfu|salope|gay|pute|cunt|encul(\u00E9|e))\sdoc/i.test(message.content):
         doc.respect(message)
         break;
 
@@ -68,7 +70,7 @@ bot.on('message', message => {
         doc.howToFortnite(message)
         break;
 
-      case /f(u+|)ck|sh(i+)t|m(e+)rde|d(a+)mn|prick|ptn|race|tg|pd|con|abruti|stfu|salope|pute|cunt|encul(\u00E9|e)/i.test(message.content):
+      case /f(u+|)ck|sh(i+)t|m(e+)rde|d(a+)mn|prick|ptn|race|batard|bite|tg|pd|con\b|abruti|stfu|salope|gay|pute|cunt|encul(\u00E9|e)/i.test(message.content):
         doc.watchYourMouth(message)
         break;
 

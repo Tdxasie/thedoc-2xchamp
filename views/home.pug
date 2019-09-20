@@ -1,0 +1,15 @@
+extends layout
+
+block content
+    div(class="w3-container w3-margin w3-center")
+        h2="Welcome to the DocBot Web Application !"
+
+
+    fieldset
+        form(action='/', method='post')
+            input.ghost-input(name='city', type='text', placeholder='Enter a City', required='')
+            input.ghost-button(type='submit', value='Get Weather')
+        if weather
+            p= weather
+        if error
+            p= error

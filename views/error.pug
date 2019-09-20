@@ -1,0 +1,5 @@
+extends layout
+
+block content
+  h1(class='w3-center w3-red')= message +" : " + error.status
+  pre(class=' w3-border w3-border-red w3-margin w3-center', style="font-size:1.3vw;") #{error.stack}
